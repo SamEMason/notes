@@ -1,7 +1,8 @@
+#!/usr/bin/env python3
+
 import typer
 import os
 import subprocess
-
 
 config = {"filepath": os.path.expanduser("~/Documents/dev/tools/notes")}
 
@@ -27,6 +28,7 @@ def new(slug: str):
 @app.command()
 def open_note(slug: str):
     """Open note in VSCode"""
+    print("Opening note:", slug)
     subprocess.run(
         [
             "code",
@@ -39,8 +41,11 @@ def open_note(slug: str):
 @app.command()
 def list():
     """List all note slugs"""
-    slugs = [f[:-4] for f in os.listdir(TEXT_DIR) if f.endswith(".txt")]
-    typer.echo("\n".join(slugs))
+    ensure_dirs()
+    files = os.listdir(TEXT_DIR)
+    for f in files:
+        if f.endswith(".txt"):
+            print(f[:-4])  # Strip `.txt`
 
 
 if __name__ == "__main__":
